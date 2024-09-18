@@ -41,12 +41,13 @@ nav {
   background-color: #eee;
 }
 
+
 nav ul {
   margin: 0;
 }
 
 nav ul li {
-  display: inline-block;
+  display: flex;
   padding: 10px;
 }
 
@@ -64,4 +65,8 @@ a {
   background-color: #f2dede;
   color: #a94442;
   padding: 10px;
+}
+nav{
+  display: flex;
+  flex-direction: row;
 }
