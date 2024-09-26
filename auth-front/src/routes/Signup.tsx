@@ -2,33 +2,73 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import DefaultLayout from "../layout/DefaultLayout";
 import { useState } from "react";
+import { API_URL } from "../auth/constants";
 
 const Signup = () => {
-  const [Username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [name, setName] = useState("")
-  const auth = useAuth()
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const auth = useAuth();
 
-  if(auth.isAuthenticated){
-    return <Navigate to="/dashboard"/>
+  if (auth.isAuthenticated) {
+    return <Navigate to="/dashboard" />;
   }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${API_URL}/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          username,
+          password,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Usuario creado con éxito");
+      } else {
+        console.log("Algo salió mal");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <DefaultLayout>
-        <form className="form">
+        <form className="form" onSubmit={handleSubmit}>
           <h1>Signup</h1>
-          <label htmlFor="">Name</label>
-          <input type="text" value={name} onChange={(e) =>setName(e.target.value)}/>
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-          <label htmlFor="">Username</label>
-          <input type="text" value={Username} onChange={(e) =>setUsername(e.target.value)} />
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-          <label htmlFor="">Password</label>
-          <input type="password" value={password} onChange={(e) =>setPassword(e.target.value)}/>
-          
-
-          <button>Create Acount</button>
+          <button type="submit">Create Account</button>
         </form>
       </DefaultLayout>
     </>
